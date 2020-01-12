@@ -20,24 +20,53 @@ public:
 	{
 		vector<vector<int>> res;
 		sort(nums.begin(), nums.end());
-		for (int i = 0; i < nums.size(); i++)
+		int now = 0;
+		int low = 0;
+		int high = 0;
+		for (int i = 0; i < nums.size() - 3; i++)
 		{
-			for (int j = i + 1; j < nums.size(); j++)
+			now = i;
+			low = i + 1;
+			high = nums.size() - 1;
+
+			while (low < high)
 			{
-				for (int m = j + 1; m < nums.size(); m++)
+				while (low < high && nums[low] == nums[low + 1])
 				{
-					if (nums[i] + nums[j] + nums[m] == 0)
+					low++;
+				}
+				while (low < high && nums[high] == nums[high - 1])
+				{
+					high--;
+				}
+				//if (low > high)
+				//	break;
+			
+				while (low < high && nums[low] + nums[high] < -nums[i])
+					low++;
+				
+				while (low < high && nums[low] + nums[high] > -nums[i])
+					high--;
+				if (nums[i] + nums[low] + nums[high] == 0)
+				{
+					while (nums[low] == nums[low + 1])
 					{
-						vector<int> tmpres{ nums[i], nums[j], nums[m] };
-						auto p = find(res.begin(), res.end(), tmpres);
-						if(p == res.end())
-							res.push_back(tmpres);
+						low++;
 					}
+
+					while (nums[high] == nums[high - 1])
+					{
+						high--;
+					}
+					vector<int> tmp = { nums[i], nums[low], nums[high] };
+					low++;
+					if(std::find(res.begin(), res.end(), tmp) == res.end())
+						res.push_back(tmp);
 				}
 			}
-
 		}
 		return res;
+
 	}
 };
 
